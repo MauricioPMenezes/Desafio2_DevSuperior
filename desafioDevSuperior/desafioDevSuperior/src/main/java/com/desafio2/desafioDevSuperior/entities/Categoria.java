@@ -2,6 +2,7 @@ package com.desafio2.desafioDevSuperior.entities;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,7 +15,7 @@ public class Categoria {
     private String description;
 
     @OneToMany(mappedBy = "categoria")
-    private Set<Atividade> atividades = new HashSet<>();
+    private Set<Atividade>  atividades=new HashSet<>();
 
     public Categoria(){
 
@@ -39,5 +40,22 @@ public class Categoria {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Atividade> getAtividades() {
+        return atividades;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Categoria categoria = (Categoria) o;
+        return Objects.equals(id, categoria.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

@@ -1,9 +1,11 @@
 package com.desafio2.desafioDevSuperior.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.MapKeyType;
 
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -21,20 +23,19 @@ public class Atividade {
 
     private Double price;
 
+
     @ManyToOne
-    private Categoria categoria; // Uma atividade pode ter somente uma categoria
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
-
-    @OneToMany(mappedBy ="atividades" )
-    private Set<Bloco> blocos = new HashSet<>(); // Uma atividade pode ter um ou muitos blocos
+    @OneToMany(mappedBy = "atividade")
+    private Set<Bloco> blocos = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "tb_atividade_participante",
-            joinColumns = @JoinColumn(name = "atividade_id"),
-            inverseJoinColumns = @JoinColumn(name = "participante_id"))
-    private Set<Participante> participantes = new HashSet<>(); // Uma atividade pode ter um ou muitos participantes
-
-
+                joinColumns = @JoinColumn(name = "atividade_id"),
+                inverseJoinColumns = @JoinColumn(name = "participante_id"))
+    private Set<Participante> participantes =new HashSet<>();
 
     public Atividade(){
 
@@ -78,11 +79,28 @@ public class Atividade {
         this.price = price;
     }
 
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
     public Set<Bloco> getBlocos() {
         return blocos;
     }
 
     public Set<Participante> getParticipantes() {
         return participantes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Atividade atividade = (Atividade) o;
+        return Objects.equals(id, atividade.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

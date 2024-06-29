@@ -1,8 +1,10 @@
+
 package com.desafio2.desafioDevSuperior.entities;
 
 import java.time.Instant;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
 
 import jakarta.persistence.*;
 
@@ -21,9 +23,9 @@ public class Bloco {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant fim;
 
-    @OneToMany
-    private Set<Atividade> atividades= new HashSet<>(); // Um bloco pode ter somente uma atividade
-
+    @ManyToOne
+    @JoinColumn(name = "atividade_id")
+    private Atividade atividade;
 
     public Bloco(){
 
@@ -59,11 +61,20 @@ public class Bloco {
         this.fim = fim;
     }
 
-    public Set<Atividade> getAtividades() {
-        return atividades;
+    public Atividade getAtividade() {
+        return atividade;
     }
 
-    public void setAtividades(Set<Atividade> atividades) {
-        this.atividades = atividades;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bloco bloco = (Bloco) o;
+        return Objects.equals(id, bloco.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
